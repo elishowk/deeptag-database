@@ -1,0 +1,9 @@
+{
+  "name": "commonplay-youtube-graph",
+  "version": "0.1.0",
+  "description": "CommonPlay Youtbe Graph Exploration",
+  "dependencies": {
+    "thoonk": "*",
+    "spore": "*"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "name": "Youtube Data API",
+  "base_url" : "http://gdata.youtube.com/feeds/api",
+  "formats": ["json","xml"],
+  "version" : "0.1",
+  "authentication" : false,
+  "methods": {
+    "getVideos": {
+      "method": "GET",
+      "path": "/videos",
+      "optional_params" : [
+        "alt",
+        "orderby",
+        "q",
+        "max-results",
+        "start-index",
+        "category",
+        "fields"
+      ],
+      "required_params": [
+        "v"
+      ],
+      "description" : "The API returns a videos feed in response to a request to search for videos. A videos feed contains a maximum of 999 entries."
+    },
+    "getVideosByCategory": {
+      "method": "GET",
+      "path": "/videos/-/:category",
+      "optional_params" : [
+        "alt",
+        "orderby",
+        "q",
+        "max-results",
+        "start-index"
+      ],
+      "required_params": [
+        "category",
+        "v"
+      ],
+      "description" : "The API returns a videos feed in response to a request to search for videos in a specified category. A videos feed contains a maximum of 999 entries."
+    }
+  },
+  "expected_status": ["200"],
+  "authority": "GITHUB:elishowk",
+  "meta" : {
+    "documentation" : "https://developers.google.com/youtube/2.0/reference"
+  }
+}
