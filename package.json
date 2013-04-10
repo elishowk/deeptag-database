@@ -1,9 +1,10 @@
 {
   "name": "commonplay-youtube-graph",
   "version": "0.1.0",
-  "description": "CommonPlay Youtbe Graph Exploration",
+  "description": "CommonPlay Deeptags collector",
   "dependencies": {
-    "thoonk": "*",
+    "mongoose": "*",
+    "validator": "*",
     "spore": "*"
   }
 }

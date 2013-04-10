@@ -3,10 +3,21 @@
 var spore = require('spore');
 //var job = require('./lib/job');
 
+
 /**
- * spore client
+ * configuration: local
  */
-var client = spore.createClient(__dirname +'/youtube-data.json');
+var config = require('./config/env.' + process.env.NODE_ENV);
+config();
+
+var MessageModel = require('./lib/db').model('message');
+var VideoModel = require('./lib/db').model('video');
+var UserModel = require('./lib/db').model('user');
+
+/**
+ * spore youtubeclient
+ */
+var youtubeclient = spore.createClient(__dirname +'/spore-specifications-deeptag/youtube-data.json');
 
 var getVideos = function(callback, q, orderby, maxResults, startIndex, category, fields) {
   var params = {
@@ -33,7 +44,7 @@ var getVideos = function(callback, q, orderby, maxResults, startIndex, category,
     params.fields = fields;
   }
 
-  client.getVideos(params, function(err, result) {
+  youtubeclient.getVideos(params, function(err, result) {
     if(err) {
       console.error(err);
       // TODO reject job
@@ -44,5 +55,9 @@ var getVideos = function(callback, q, orderby, maxResults, startIndex, category,
 };
 
 getVideos(function(result) {
-  console.log(result);
-}, null, 'viewCount', 10, null, null, 'entry(gd:comments)');
+  var body = JSON.parse(result.body);
+  body.feed.entry.forEach(function(item) {
+    // TODO try catch here
+    console.log(item['gd$comments']['gd$feedLink']['href']);
+  });
+}, null, 'viewCount', 50, null, null, 'entry(gd:comments)');
