@@ -58,6 +58,21 @@ getVideos(function(result) {
   var body = JSON.parse(result.body);
   body.feed.entry.forEach(function(item) {
     // TODO try catch here
-    console.log(item['gd$comments']['gd$feedLink']['href']);
+    console.log(item);
+    //console.log(item['gd$comments']['gd$feedLink']['href']);
+    var user = new UserModel({
+      'username': item.author[0].name['$t'],
+      'id': item.author[0]['yt$userId']['$t'],
+      'uri': item.author[0].uri['$t']
+    });
+    user.save(function (err, data) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+    });
+    var video = new VideoModel({
+
+    });
   });
-}, null, 'viewCount', 50, null, null, 'entry(gd:comments)');
+}, null, 'viewCount', 1, null, null, 'entry(gd:comments,link,author,category)');

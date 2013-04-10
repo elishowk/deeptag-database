@@ -1,32 +1,29 @@
 'use strict';
 
 var Schema = require('mongoose').Schema;
-var check = require('validator').check;
 
 module.exports = new Schema({
   'title': {
     'type': String,
-    'required': true,
-    'trim': true,
-    'match': /^.{0,100}$/
+    'required': true
   },
-  'video': {
+  'uri': {
     'type': String,
-    'required': true,
-    'trim': true,
-    'validate': [function (value) {
-      try {
-        /** TODO check real video url **/
-        check(value).isUrl();
-      } catch (e) {
-        return false;
-      }
-    }]
+    'required': true
   },
   'user': {
-    'type': Schema.Types.ObjectId,
+    'type': String,
     'required': true,
     'index': true
+  },
+  'category': {
+    'type': Schema.Types.Mixed
+  },
+  'meta': {
+    'type': Schema.Types.Mixed
+  },
+  'published': {
+    'type': String
   }
 }, {
   'collection': 'video',

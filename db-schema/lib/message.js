@@ -13,15 +13,20 @@ module.exports = new Schema({
     'index': true
   },
   'user': {
-    'type': Schema.Types.ObjectId,
+    'type': String,
     'required': true,
     'index': true,
-    'ref': 'user'
+  },
+  'published': {
+    'type': String
   },
   'video': {
-    'type': Schema.Types.ObjectId,
+    'type': String,
     'required': true,
     'index': true
+  },
+  'meta': {
+    'type': Schema.Types.Mixed
   }
 }, {
   'collection': 'message',
