@@ -10,6 +10,19 @@
       "path": "/tracks.:format",
       "optional_params" : [
         "order",
+        "q",
+        "tags",
+        "filter",
+        "license",
+        "bpm[from]",
+        "bpm[to]",
+        "duration[from]",
+        "duration[to]",
+        "created_at[from]",
+        "created_at[to]",
+        "ids",
+        "genres",
+        "types"
       ],
       "required_params": [
         "consumer_key"

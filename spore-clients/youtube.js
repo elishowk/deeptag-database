@@ -7,29 +7,29 @@ var UserModel = require('../lib/db').model('user');
  */
 var youtubeclient = spore.createClient(__dirname +'/youtube-data.json');
 
-var getVideos = function(callback, q, orderby, maxResults, startIndex, category, fields) {
+var getWidget = function(callback, query) {
   var params = {
     'v': 2,
     'orderby': 'viewCount',
     'alt': 'json'
   };
-  if (q) {
-    params.q= q;
+  if (query.q) {
+    params.q = query.q;
   }
-  if (orderby) {
-    params.orderby = orderby;
+  if (query.orderby) {
+    params.orderby = query.orderby;
   }
-  if (maxResults) {
-    params['max-results'] = maxResults;
+  if (query.maxResults) {
+    params['max-results'] = query.maxResults;
   }
-  if (startIndex) {
-    params['start-index'] = startIndex;
+  if (query.startIndex) {
+    params['start-index'] = query.startIndex;
   }
-  if (category) {
-    params.category = category;
+  if (query.category) {
+    params.category = query.category;
   }
-  if (fields) {
-    params.fields = fields;
+  if (query.fields) {
+    params.fields = query.fields;
   }
 
   youtubeclient.getVideos(params, function(err, result) {
@@ -42,8 +42,8 @@ var getVideos = function(callback, q, orderby, maxResults, startIndex, category,
   });
 };
 
-var getMostViewedComments = module.exports = function() {
-  getVideos(function(result) {
+var getComments = module.exports = function() {
+  getWidget(function(result) {
     var body = JSON.parse(result.body);
     body.feed.entry.forEach(function(item) {
       // TODO try catch here
@@ -61,5 +61,7 @@ var getMostViewedComments = module.exports = function() {
         }
       });
     });
-  }, null, 'viewCount', 1, null, null, 'entry(gd:comments,link,author,category)');
+  }, {
+    'fields': 'entry(gd:comments,link,author,category)'
+  });
 };

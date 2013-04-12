@@ -20,6 +20,9 @@ db.model('message', require('./db-schema').Message);
 db.model('widget', require('./db-schema').Widget);
 db.model('user', require('./db-schema').User);
 
-// TODO
-var getMostViewedComments = require('./spore-clients/youtube');
-getMostViewedComments();
+// TODO better API and jobs
+var getComments = require('./spore-clients/youtube');
+getComments(config);
+
+getComments = require('./spore-clients/soundcloud');
+getComments(config);
