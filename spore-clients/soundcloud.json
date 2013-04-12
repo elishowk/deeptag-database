@@ -1,0 +1,35 @@
+{
+  "name": "Soundcloud API",
+  "base_url" : "https://api.soundcloud.com/",
+  "formats": ["json"],
+  "version" : "0.1",
+  "authentication" : true,
+  "methods": {
+    "getTracks": {
+      "method": "GET",
+      "path": "/tracks.:format",
+      "optional_params" : [
+        "order",
+      ],
+      "required_params": [
+        "consumer_key"
+      ],
+      "description" : "returns a tracks list."
+    },
+    "getComments": {
+      "method": "GET",
+      "path": "/tracks/:id/comments.:format",
+      "optional_params" : [
+      ],
+      "required_params": [
+        "consumer_key"
+      ],
+      "description" : "returns a comments list given a track id."
+    }
+  },
+  "expected_status": ["200"],
+  "authority": "GITHUB:elishowk",
+  "meta" : {
+    "documentation" : "https://developers.soundcloud.com/docs"
+  }
+}

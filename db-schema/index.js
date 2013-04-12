@@ -2,7 +2,7 @@
 
 module.exports = {
   'User': require('./lib/user'),
-  'Video': require('./lib/video'),
+  'Widget': require('./lib/widget'),
   'Message': require('./lib/message'),
 };
 

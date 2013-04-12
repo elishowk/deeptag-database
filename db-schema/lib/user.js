@@ -1,23 +1,35 @@
 'use strict';
 
 var Schema = require('mongoose').Schema;
+var check = require('validator').check;
 
 module.exports = new Schema({
   'username': {
     'type': String,
-    'index': true
-  },
-  'id': {
-    'type': String,
     'required': true,
-    'index': true
+    'trim': true,
+    'lowercase': true,
+    'match': /\w{3,15}/,
+    'index': {'unique': true}
   },
-  'uri': {
+  'url': {
     'type': String,
-  }
+    'select': false
+  },
+  'meta': {
+    'type': [{
+      'key': {
+        'type': String,
+        'required': true
+      },
+      'value': {
+        'type': Schema.Types.Mixed,
+        'required': true
+      }
+    }],
+    'select': false
+  },
 }, {
   'collection': 'user',
-  'strict': true,
-  'versionKey': false,
-  '_id': false
+  'strict': true
 });
