@@ -51,10 +51,13 @@ var getComments = module.exports = function() {
       //console.log(item['gd$comments']['gd$feedLink']['href']);
       var user = new UserModel({
         'username': item.author[0].name['$t'],
-        'id': item.author[0]['yt$userId']['$t'],
-        'uri': item.author[0].uri['$t']
+        'meta': [{
+          'key': 'id',
+          'value': item.author[0]['yt$userId']['$t']
+        }],
+        'url': item.author[0].uri['$t']
       });
-      user.save(function (err, data) {
+      user.save(function (err) {
         if (err) {
           console.log(err);
           return;

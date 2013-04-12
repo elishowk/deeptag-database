@@ -21,8 +21,8 @@ db.model('widget', require('./db-schema').Widget);
 db.model('user', require('./db-schema').User);
 
 // TODO better API and jobs
-var getComments = require('./spore-clients/youtube');
-getComments(config);
+//var getComments = require('./spore-clients/youtube');
+//getComments(config);
 
-getComments = require('./spore-clients/soundcloud');
+var getComments = require('./spore-clients/soundcloud');
 getComments(config);
