@@ -43,9 +43,7 @@ var getWidget = function(callback, query) {
 
 var getComments = function(callback, query) {
   var params = {
-    'format': 'json',
-    'limit': 10,
-    'offset': 0
+    'format': 'json'
   };
   if (query.limit) {
     params.limit = query.limit;
@@ -55,6 +53,7 @@ var getComments = function(callback, query) {
   }
   params.consumer_key = query.consumer_key;
   params.id = query.id;
+
   client.getComments(params, function(err, result) {
     if(err) {
       console.error(err);
@@ -65,21 +64,30 @@ var getComments = function(callback, query) {
   });
 };
 
-var saveUser = function(item) {
-  if (item.comment_count === 0) {
-    return false;
-  }
+var saveUser = function(item, cb) {
   var user = new UserModel({
     'username': item.user.username,
     'url': item.user.uri,
     'id': item.user.id
   });
-  user.save();
-  return user;
+  user.save(function(err, user) {
+    if (err) {
+      console.error(err);
+    }
+    if (err && err.code === 11000) {
+      user = UserModel.findOne({'id': item.user.id}, function(err, user) {
+        if(!err) {
+          cb(user);
+        }
+      });
+      return;
+    }
+    cb(user);
+  });
 };
 
-var saveWidget = function(item, user) {
-  if (item.comment_count === 0) {
+var saveWidget = function(item, user, cb) {
+  if (item.comment_count && item.comment_count === 0) {
     return false;
   }
   var widget = new WidgetModel({
@@ -90,37 +98,41 @@ var saveWidget = function(item, user) {
     'permalink': item.permalink_url,
     'id': item.id
   });
-  widget.save();
-  return widget;
+  widget.save(function(err, widget) {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    cb(widget);
+  });
 };
 
 var saveComments = function(widget, config) {
   getComments(function(result) {
-    debugger;
     if (result.status !== 200) {
       // FIXME reject job
       return;
     }
     var data = JSON.parse(result.body);
-    var selectedData = data.map(function(item) {
-      var user = saveUser(item);
-      if (user === false) {
-        return;
-      }
-      return {
-        'body': item.body,
-        'created_at': item.created_at,
-        'id': item.id,
-        'reference': item.timestamp,
-        'user': user._id,
-        'widget': widget._id
-      };
-    });
-    MessageModel.create(selectedData, function(err, indata) {
-      if (err) {
-        console.log(err);
-      }
-      console.log(indata);
+    data.forEach(function(item) {
+      saveUser(item, function(user) {
+        if (!user) {
+          return;
+        }
+        var msg = new MessageModel({
+          'body': item.body,
+          'created_at': item.created_at,
+          'id': item.id,
+          'reference': item.timestamp,
+          'user': user._id,
+          'widget': widget._id
+        });
+        msg.save(function(err) {
+          if (err) {
+            console.error(err);
+          }
+        });
+      });
     });
   }, {
     'id': widget.id,
@@ -132,26 +144,26 @@ var saveComments = function(widget, config) {
  * Main crawling function
  */
 module.exports = function(config) {
-  getWidget(function(result) {
+  var onGetWidget = function(result) {
     if (result.status !== 200) {
       // FIXME reject job
       return;
     }
     var data = JSON.parse(result.body);
-    console.log(data);
     data.forEach(function(item) {
-      var user = saveUser(item);
-      if (user === false) {
-        return;
-      }
+      saveUser(item, function(user) {
+        saveWidget(item, user, function(widget) {
+          saveComments(widget, config);
+        });
+      });
 
-      var widget = saveWidget(item, user);
-      if (widget === false) {
-        return;
-      }
-      saveComments(widget, config);
     });
-  }, {
-    'consumer_key': config.soundcloud.consumer_key
-  });
+  };
+  for (var offset=0; offset<=config.soundcloud.videoGoal; offset=offset+config.soundcloud.limit) {
+    getWidget(onGetWidget, {
+      'offset': offset,
+      'limit': config.soundcloud.limit,
+      'consumer_key': config.soundcloud.consumer_key
+    });
+  }
 };

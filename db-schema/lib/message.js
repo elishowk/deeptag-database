@@ -6,7 +6,6 @@ var check = require('validator').check;
 module.exports = new Schema({
   'body': {
     'type': String,
-    'required': true,
     'trim': true
   },
   'reference': {
@@ -36,6 +35,9 @@ module.exports = new Schema({
     'type': String,
     'required': true,
     'index': { 'unique': true }
+  },
+  'created_at': {
+    'type': Date
   }
 }, {
   'collection': 'message',

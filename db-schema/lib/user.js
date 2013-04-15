@@ -14,9 +14,7 @@ module.exports = new Schema({
   },
   'url': {
     'type': String,
-    'select': false,
-    'required': true,
-    'index': { 'unique': true }
+    'select': false
   },
   'id': {
     'type': String,

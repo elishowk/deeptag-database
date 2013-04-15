@@ -13,15 +13,7 @@ module.exports = new Schema({
   'video': {
     'type': String,
     'required': true,
-    'trim': true,
-    'validate': [function (value) {
-      try {
-        /** TODO check real video url **/
-        check(value).isUrl();
-      } catch (e) {
-        return false;
-      }
-    }]
+    'trim': true
   },
   'permalink': {
     'type': String,
