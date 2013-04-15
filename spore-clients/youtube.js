@@ -2,6 +2,7 @@
 
 var spore = require('spore');
 var UserModel = require('../lib/db').model('user');
+
 /**
  * spore youtubeclient
  */
@@ -42,7 +43,10 @@ var getWidget = function(callback, query) {
   });
 };
 
-var getComments = module.exports = function() {
+/**
+ * Main crawling function
+ */
+module.exports = function() {
   getWidget(function(result) {
     var body = JSON.parse(result.body);
     body.feed.entry.forEach(function(item) {

@@ -24,5 +24,5 @@ db.model('user', require('./db-schema').User);
 //var getComments = require('./spore-clients/youtube');
 //getComments(config);
 
-var getComments = require('./spore-clients/soundcloud');
-getComments(config);
+var crawl = require('./spore-clients/soundcloud');
+crawl(config);

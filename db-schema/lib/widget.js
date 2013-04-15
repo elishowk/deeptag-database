@@ -27,17 +27,16 @@ module.exports = new Schema({
     'type': String,
     'required': true,
     'trim': true,
-    'validate': [function (value) {
-      try {
-        check(value).isUrl();
-      } catch (e) {
-        return false;
-      }
-    }]
+    'index': { 'unique': true }
   },
-  'published': {
-    'type': Date,
-    'index': true
+  'id': {
+    'type': String,
+    'required': true,
+    'trim': true,
+    'index': { 'unique': true }
+  },
+  'created_at': {
+    'type': Date
   },
   'user': {
     'type': Schema.Types.ObjectId,

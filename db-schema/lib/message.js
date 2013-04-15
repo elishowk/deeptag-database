@@ -7,14 +7,7 @@ module.exports = new Schema({
   'body': {
     'type': String,
     'required': true,
-    'trim': true,
-    'validate': [function (value) {
-      try {
-        check(value).len(1, 250);
-      } catch (e) {
-        return false;
-      }
-    }]
+    'trim': true
   },
   'reference': {
     'type': Number,
@@ -38,6 +31,11 @@ module.exports = new Schema({
     'type': Schema.Types.ObjectId,
     'required': true,
     'index': true
+  },
+  'id': {
+    'type': String,
+    'required': true,
+    'index': { 'unique': true }
   }
 }, {
   'collection': 'message',

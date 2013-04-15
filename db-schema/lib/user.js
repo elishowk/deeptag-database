@@ -9,12 +9,20 @@ module.exports = new Schema({
     'required': true,
     'trim': true,
     'lowercase': true,
-    'match': /\w{3,15}/,
+    //'match': /\w{3,15}/,
     'index': {'unique': true}
   },
   'url': {
     'type': String,
-    'select': false
+    'select': false,
+    'required': true,
+    'index': { 'unique': true }
+  },
+  'id': {
+    'type': String,
+    'required': true,
+    'trim': true,
+    'index': { 'unique': true }
   },
   'meta': {
     'type': [{
@@ -28,7 +36,7 @@ module.exports = new Schema({
       }
     }],
     'select': false
-  },
+  }
 }, {
   'collection': 'user',
   'strict': true
