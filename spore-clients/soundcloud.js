@@ -75,8 +75,11 @@ var saveUser = function(item, cb) {
       console.error(err);
     }
     if (err && err.code === 11000) {
-      user = UserModel.findOne({'id': item.user.id}, function(err, user) {
-        if(!err) {
+      UserModel.findOne({'id': item.user.id}, function(err, user) {
+        if(err) {
+          return;
+        }
+        if (user) {
           cb(user);
         }
       });
@@ -159,7 +162,7 @@ module.exports = function(config) {
 
     });
   };
-  for (var offset=0; offset<=config.soundcloud.videoGoal; offset=offset+config.soundcloud.limit) {
+  for (var offset = config.soundcloud.offset; offset <= config.soundcloud.offset + config.soundcloud.videoGoal; offset=offset+config.soundcloud.limit) {
     getWidget(onGetWidget, {
       'offset': offset,
       'limit': config.soundcloud.limit,
