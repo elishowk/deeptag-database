@@ -19,5 +19,5 @@ config.soundcloud = {
   'consumer_key': '13f889003b89e2fd9162d70310a856e1',
   'limit': 20,
   'videoGoal': 1000,
-  'offset': 1000
+  'offset': 0
 };

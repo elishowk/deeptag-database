@@ -33,7 +33,6 @@ var getWidget = function(callback, query) {
   params.consumer_key = query.consumer_key;
   client.getTracks(params, function(err, result) {
     if(err) {
-      console.error(err);
       // TODO reject or retry later
       return;
     }
@@ -56,7 +55,6 @@ var getComments = function(callback, query) {
 
   client.getComments(params, function(err, result) {
     if(err) {
-      console.error(err);
       // TODO reject or retry later
       return;
     }
@@ -71,9 +69,6 @@ var saveUser = function(item, cb) {
     'id': item.user.id
   });
   user.save(function(err, user) {
-    if (err) {
-      console.error(err);
-    }
     if (err && err.code === 11000) {
       UserModel.findOne({'id': item.user.id}, function(err, user) {
         if(err) {
@@ -103,7 +98,6 @@ var saveWidget = function(item, user, cb) {
   });
   widget.save(function(err, widget) {
     if (err) {
-      console.error(err);
       return;
     }
     cb(widget);
@@ -130,11 +124,7 @@ var saveComments = function(widget, config) {
           'user': user._id,
           'widget': widget._id
         });
-        msg.save(function(err) {
-          if (err) {
-            console.error(err);
-          }
-        });
+        msg.save();
       });
     });
   }, {
